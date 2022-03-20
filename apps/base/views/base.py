@@ -5,9 +5,9 @@
 
 
 import logging
-from rest_framework.renderers import TemplateHTMLRenderer
-from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.renderers import TemplateHTMLRenderer
 
 
 logger = logging.getLogger(__name__)
@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 class BaseTemplateView(APIView):
 
-    renderer_classes = [TemplateHTMLRenderer]
     template_name = 'base.html'
+    renderer_classes = [TemplateHTMLRenderer]
 
     def get(self, request, *args, **kwargs):
         logger.info("Get请求信息: {}".format(request.query_params))
