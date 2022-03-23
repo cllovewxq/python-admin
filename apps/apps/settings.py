@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'base',
+    'zabbix',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # URL控制
 APPEND_SLASH = False
+
+
+ZABBIX_IP = "172.16.60.161"
+ZABBIX_TOKEN = "857d81b382d352b2808ba9a6ff004eab8c357cc169e46649170ffbed80d81273"
