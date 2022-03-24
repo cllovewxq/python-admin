@@ -16,9 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from base import views as base_views
+from base.views.favicon import favicon_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('favicon.ico', favicon_view, name="favicon视图"),
 
     path('base/', base_views.BaseTemplateView.as_view(), name="基础"),
 ]
