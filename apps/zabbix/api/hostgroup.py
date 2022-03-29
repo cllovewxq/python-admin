@@ -9,7 +9,7 @@ from typing import Optional
 from base.enums import EnumMsg
 
 
-class ApiGroupHost(ApiBase):
+class ApiHostGroup(ApiBase):
 
     def __init__(self):
         """
@@ -60,15 +60,15 @@ class ApiGroupHost(ApiBase):
         )
         return response
 
-    def delete(self, host_group_id) -> Optional[dict] == bool:
+    def delete(self, host_group_ids: list) -> Optional[dict] == bool:
         """
         删除
-        :param host_group_id: ID
+        :param host_group_ids: ID数组
         :return:
         """
         response = self.post(
             method="hostgroup.delete",
-            params=[host_group_id]
+            params=host_group_ids
         )
         return response
 
