@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 
 class Token(models.Model):
 
-    id = models.CharField(primary_key=True, editable=False, default=uuid.uuid4, max_length=64)
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="用户")
     token = models.TextField(verbose_name="API Token")
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")

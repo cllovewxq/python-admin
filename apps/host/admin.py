@@ -1,23 +1,14 @@
 # -*- coding: utf-8 -*-
-# admin 课程
+# admin
 # 作者: 三石
 # 时间: 2022-02-15
 
 
 from django.http import HttpResponseRedirect
 from django.contrib import admin, messages
-from django.shortcuts import render
 from base.enums import EnumMsg
-from host.models import Transmitter, Switch
+from host.models import Switch
 from zabbix.api import ApiHost
-
-
-@admin.register(Transmitter)
-class TransmitterAdmin(admin.ModelAdmin):
-
-    def changelist_view(self, request, extra_context=None):
-        context = {"data": []}
-        return render(request, 'transmitter.html', context)
 
 
 @admin.register(Switch)
