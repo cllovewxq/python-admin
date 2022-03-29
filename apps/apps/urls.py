@@ -17,11 +17,22 @@ from django.contrib import admin
 from django.urls import path
 from base import views as base_views
 from base.views.favicon import favicon_view
+from host import views as host_views
+from zabbix.views.test import TestAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('favicon.ico', favicon_view, name="favicon视图"),
 
+    path('host/switch/enable/<switch_id>/', host_views.SwitchEnableAPIView.as_view(), name="交换机启用"),
+    path('host/switch/disable/<switch_id>/', host_views.SwitchDisableAPIView.as_view(), name="交换机禁用"),
+
     path('base/', base_views.BaseTemplateView.as_view(), name="基础"),
+
+    path('test/', TestAPIView.as_view(), name="测试"),
 ]
+
+
+admin.site.site_header = "台站统一监控平台"
+admin.site.site_title = "台站统一监控平台"
