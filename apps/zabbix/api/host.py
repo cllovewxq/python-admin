@@ -5,6 +5,7 @@
 
 
 from .base import ApiBase
+from .hostinterface import ApiHostInterface
 from typing import Optional
 from base.enums import EnumMsg
 
@@ -26,6 +27,36 @@ class ApiHost(ApiBase):
             method="host.get",
             params={
 
+            }
+        )
+        return response
+
+    def enable(self, host_id):
+        """
+        启用
+        :param host_id: 主机ID
+        :return:
+        """
+        response = self.post(
+            method="host.update",
+            params={
+                "hostid": host_id,
+                "status": 0
+            }
+        )
+        return response
+
+    def disable(self, host_id):
+        """
+        禁用
+        :param host_id: 主机ID
+        :return:
+        """
+        response = self.post(
+            method="host.update",
+            params={
+                "hostid": host_id,
+                "status": 1
             }
         )
         return response
@@ -87,24 +118,43 @@ class ApiHost(ApiBase):
         :param snmp_community: SNMP共同体名
         :return:
         """
+        response_host_interface = ApiHostInterface().get_detail(host_id=host_id)
+        result = response_host_interface.get("result", [])
+        if not result:
+            params_interface = {
+                "type": 2,
+                "main": 1,
+                "useip": 1,
+                "ip": ipaddress,
+                "dns": "",
+                "port": port,
+                "details": {
+                    "version": 2,
+                    "community": snmp_community
+                }
+            }
+        else:
+            params_interface = {
+                "interfaceid": result[0].get("interfaceid"),
+                "type": 2,
+                "main": 1,
+                "useip": 1,
+                "ip": ipaddress,
+                "dns": "",
+                "port": port,
+                "details": {
+                    "version": 2,
+                    "community": snmp_community
+                }
+            }
+
         response = self.post(
-            method="host.create",
+            method="host.update",
             params={
                 "hostid": host_id,
                 "name": name,
                 "interfaces": [
-                    {
-                        "type": 2,
-                        "main": 1,
-                        "useip": 1,
-                        "ip": ipaddress,
-                        "dns": "",
-                        "port": port,
-                        "details": {
-                            "version": 2,
-                            "community": snmp_community
-                        }
-                    }
+                    params_interface
                 ],
                 "groups": [
                     {
@@ -120,20 +170,19 @@ class ApiHost(ApiBase):
         )
         return response
 
-    def delete(self, host_id) -> Optional[dict] == bool:
+    def delete(self, host_ids: list) -> Optional[dict] == bool:
         """
         删除
-        :param host_id: ID
+        :param host_ids: ID数组
         :return:
         """
         response = self.post(
             method="host.delete",
-            params=[host_id]
+            params=host_ids
         )
         return response
 
-    @staticmethod
-    def get_host_id(response) -> Optional[bool] == str:
+    def get_host_id(self, response) -> Optional[bool] == str:
         """
         查询主机ID
         """
@@ -142,6 +191,7 @@ class ApiHost(ApiBase):
         if not host_ids:
             error = response.get("error", {})
             data = error.get("data", EnumMsg.UnknownError.value)
-            return data
+            self.error = data
+            return False
         else:
             return host_ids[0]

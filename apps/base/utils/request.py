@@ -7,6 +7,7 @@
 import httpx
 import json
 import logging
+from typing import Optional
 
 
 logger = logging.getLogger(__name__)
@@ -21,9 +22,7 @@ class UtilsRequest(object):
         # 超时时间
         self.timeout = 5
 
-        self.response = False
-
-    def get(self, url, headers=None, params=None):
+    def get(self, url, headers=None, params=None) -> Optional[dict] is False:
         """
         get请求
         :param url: 地址
@@ -43,15 +42,15 @@ class UtilsRequest(object):
 
         try:
             response = httpx.get(url=url, headers=headers, params=params, timeout=self.timeout, verify=False)
-            self.response = response.json()
+            logger.info("调用返回: {}".format(response.text))
 
-            logger.info("调用返回: {}".format(self.response))
-            return True
+            response_json = response.json()
+            return response_json
         except httpx.RequestError as error:
             logger.error("接口请求错误: {}".format(error))
             return False
 
-    def post(self, url, headers=None, params=None, data=None):
+    def post(self, url, headers=None, params=None, data=None) -> Optional[dict] is False:
         """
         post请求
         :param url: 地址
@@ -73,9 +72,10 @@ class UtilsRequest(object):
 
         try:
             response = httpx.post(url=url, headers=headers, params=params, json=data, timeout=self.timeout, verify=False)
-            self.response = response.json()
-            logger.info("调用返回: {}".format(self.response))
-            return True
+            logger.info("调用返回: {}".format(response.text))
+
+            response_json = response.json()
+            return response_json
         except httpx.RequestError as error:
             logger.error("接口请求错误: {}".format(error))
             return False

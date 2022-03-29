@@ -27,6 +27,8 @@ class ApiBase(object):
 
         self.jsonrpc = "2.0"
 
+        self.error = None
+
     def init_data(self, method: str, params: dict) -> dict:
         """
         初始化data

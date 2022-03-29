@@ -4,7 +4,9 @@
 # 时间: 2022-02-15
 
 
-from django.contrib import admin
+from django.shortcuts import redirect
+from django.contrib import admin, messages
+from base.enums import EnumMsg
 from station.models import Station
 from zabbix.api import ApiHostGroup
 
@@ -28,17 +30,24 @@ class StationAdmin(admin.ModelAdmin):
         else:
             response = api.update(host_group_id=obj.host_group_id, name=str(obj.host_group))
 
+        # 解析返回的host_group_id
         host_grop_id = api.get_host_group_id(response=response)
 
-        obj.host_group_id = host_grop_id
-        obj.save()
+        if not host_grop_id:
+            messages.warning(request, EnumMsg.ZabbixAPIError.value.format(api.error))
+            return
+        else:
+            obj.host_group_id = host_grop_id
+            obj.save()
 
     def delete_model(self, request, obj):
+
         api = ApiHostGroup()
         api.delete(host_group_ids=[obj.host_group_id])
         obj.delete()
 
     def delete_queryset(self, request, queryset):
+
         host_group_ids = []
         for obj in queryset:
             host_group_ids.append(obj.host_group_id)

@@ -13,7 +13,7 @@ from django.utils.html import format_html
 class Station(models.Model):
 
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
-    host_group = models.UUIDField(default=uuid.uuid4(), verbose_name="主机组编号")
+    host_group = models.UUIDField(default=uuid.uuid4, verbose_name="主机组编号")
     host_group_id = models.CharField(max_length=32, verbose_name="主机组ID")
     name = models.CharField(max_length=32, verbose_name="名称", unique=True)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")

@@ -72,8 +72,7 @@ class ApiHostGroup(ApiBase):
         )
         return response
 
-    @staticmethod
-    def get_host_group_id(response) -> Optional[bool] == str:
+    def get_host_group_id(self, response) -> Optional[bool] == str:
         """
         查询主机组ID
         """
@@ -82,7 +81,8 @@ class ApiHostGroup(ApiBase):
         if not group_ids:
             error = response.get("error", {})
             data = error.get("data", EnumMsg.UnknownError.value)
-            return data
+            self.error = data
+            return False
         else:
             return group_ids[0]
 
