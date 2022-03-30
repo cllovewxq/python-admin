@@ -9,7 +9,7 @@ from django.db import models
 
 class Hosts(models.Model):
 
-    hostid = models.CharField(primary_key=True, editable=False, max_length=64)
+    hostid = models.BigIntegerField(primary_key=True, editable=False)
     host = models.CharField(max_length=128, unique=True)
     status = models.IntegerField(default=0)
     name = models.CharField(max_length=128)

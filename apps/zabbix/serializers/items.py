@@ -5,20 +5,20 @@
 
 
 from rest_framework import serializers, validators
-from zabbix.models import Hosts
+from zabbix.models import Items
 
 
-class SerializersHostsIdAndName(serializers.ModelSerializer):
+class SerializersItemsIdAndName(serializers.ModelSerializer):
 
     id = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
 
     class Meta:
-        model = Hosts
-        fields = ["id", "name", ]
+        model = Items
+        fields = ["id", "name", "value_type", ]
 
     def get_id(self, obj):
-        return obj.hostid
+        return obj.itemid
 
     def get_name(self, obj):
         return obj.name
