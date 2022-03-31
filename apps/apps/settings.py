@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
+import logging.config
 from pathlib import Path
+from .log import LogConfig
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
 
+    'simpleui',
     'rest_framework',
 
     'django.contrib.admin',
@@ -43,6 +46,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'base',
+    'host',
+    'problem',
+    'station',
     'zabbix',
 ]
 
@@ -80,12 +86,47 @@ WSGI_APPLICATION = 'apps.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+
+DB_IP = "127.0.0.1"
+DB_NAME_DATA = "data"
+DB_NAME_ZABBIX = "zabbix"
+DB_PORT = "5432"
+DB_USERNAME = "postgres"
+DB_PASSWORD = "postgres"
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': DB_NAME_DATA,
+        'HOST': DB_IP,
+        'PORT': DB_PORT,
+        'USER': DB_USERNAME,
+        'PASSWORD': DB_PASSWORD,
+        'OPTIONS': {
+            'options': '-c search_path=public'
+        }
+
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'zabbix': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': DB_NAME_ZABBIX,
+        'HOST': DB_IP,
+        'PORT': DB_PORT,
+        'USER': DB_USERNAME,
+        'PASSWORD': DB_PASSWORD,
+        'OPTIONS': {
+            'options': '-c search_path=public'
+        }
     }
 }
+
+
+DATABASE_ROUTERS = [
+    'apps.db_router.ZabbixRouter',
+]
 
 
 # Password validation
@@ -139,5 +180,74 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 APPEND_SLASH = False
 
 
-ZABBIX_IP = "172.16.60.161"
+ZABBIX_IP = "127.0.0.01"
 ZABBIX_TOKEN = "857d81b382d352b2808ba9a6ff004eab8c357cc169e46649170ffbed80d81273"
+
+
+# 日志
+# 定义logger
+logger = logging.getLogger(__name__)
+# 导入配置信息
+logging.config.dictConfig(LogConfig)
+
+
+# simple ui 配置
+SIMPLEUI_HOME_INFO = False
+SIMPLEUI_CONFIG = {
+    'system_keep': False,
+    'dynamic': True,
+    'menus': [
+        {
+            'app': 'station',
+            'name': '台站模块',
+            'icon': 'fas fa-home',
+            'models': [
+                {
+                    'name': '台站管理',
+                    'icon': 'fa fa-tag',
+                    'url': 'station/station/'
+                }
+            ]
+        },
+        {
+            'app': 'problem',
+            'name': '告警模块',
+            'icon': 'fas fa-question',
+            'models': [
+                {
+                    'name': '告警管理',
+                    'icon': 'fa fa-tag',
+                    'url': 'problem/problem/'
+                }
+            ]
+        },
+        {
+            'app': 'host',
+            'name': '设备模块',
+            'icon': 'fas fa-desktop',
+            'models': [
+                {
+                    'name': '交换机',
+                    'icon': 'fa fa-tag',
+                    'url': 'host/switch/'
+                }
+            ]
+        },
+        {
+            'app': 'auth',
+            'name': '权限认证',
+            'icon': 'fas fa-user-shield',
+            'models': [
+                {
+                    'name': '用户',
+                    'icon': 'fa fa-tag',
+                    'url': 'auth/user/'
+                }, {
+                    'name': '角色',
+                    'icon': 'fa fa-tag',
+                    'url': 'auth/group/'
+                }
+            ]
+        }
+    ]
+}
