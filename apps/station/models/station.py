@@ -13,8 +13,8 @@ from django.utils.html import format_html
 class Station(models.Model):
 
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
-    host_group = models.UUIDField(default=uuid.uuid4, verbose_name="主机组编号")
-    host_group_id = models.CharField(max_length=32, verbose_name="主机组ID")
+    zabbix_id = models.CharField(max_length=32, verbose_name="Zabbix ID")
+    zabbix_code = models.UUIDField(verbose_name="Zabbix 编号", default=uuid.uuid4)
     name = models.CharField(max_length=32, verbose_name="名称", unique=True)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     update_time = models.DateTimeField(auto_now=True, verbose_name="修改时间")

@@ -61,13 +61,13 @@ class ApiHost(ApiBase):
         )
         return response
 
-    def create_snmp(self, host, name, group_id, model_id, ipaddress, port, snmp_community) -> Optional[dict] == bool:
+    def create_snmp(self, host, name, group_id, template_id, ipaddress, port, snmp_community) -> Optional[dict] == bool:
         """
         创建SNMP
         :param host: 编号
         :param name: 名称
         :param group_id: 主机组ID
-        :param model_id: 模板ID
+        :param template_id: 模板ID
         :param ipaddress: IP地址
         :param port: 端口
         :param snmp_community: SNMP共同体名
@@ -99,20 +99,20 @@ class ApiHost(ApiBase):
                 ],
                 "templates": [
                     {
-                        "templateid": model_id
+                        "templateid": template_id
                     }
                 ],
             }
         )
         return response
 
-    def update_snmp(self, host_id, name, group_id, model_id, ipaddress, port, snmp_community) -> Optional[dict] == bool:
+    def update_snmp(self, host_id, name, group_id, template_id, ipaddress, port, snmp_community) -> Optional[dict] == bool:
         """
         更新SNMP
         :param host_id: ID
         :param name: 名称
         :param group_id: 主机组ID
-        :param model_id: 模板ID
+        :param template_id: 模板ID
         :param ipaddress: IP地址
         :param port: 端口
         :param snmp_community: SNMP共同体名
@@ -163,7 +163,7 @@ class ApiHost(ApiBase):
                 ],
                 "templates": [
                     {
-                        "templateid": model_id
+                        "templateid": template_id
                     }
                 ],
             }

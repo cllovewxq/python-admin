@@ -17,18 +17,18 @@ class StationAdmin(admin.ModelAdmin):
     ordering = ('-create_time', )
     list_per_page = 20
     search_fields = ('name', )
-    exclude = ('host_group', 'host_group_id', )
+    exclude = ('zabbix_code', 'zabbix_id', )
 
     def save_model(self, request, obj, form, change):
 
         api = ApiHostGroup()
 
         # 创建
-        if not obj.host_group_id:
-            response = api.create(name=str(obj.host_group))
+        if not obj.zabbix_id:
+            response = api.create(name=str(obj.zabbix_code))
         # 更新
         else:
-            response = api.update(host_group_id=obj.host_group_id, name=str(obj.host_group))
+            response = api.update(host_group_id=obj.zabbix_id, name=str(obj.zabbix_code))
 
         # 解析返回的host_group_id
         host_grop_id = api.get_host_group_id(response=response)
@@ -37,20 +37,20 @@ class StationAdmin(admin.ModelAdmin):
             messages.warning(request, EnumMsg.ZabbixAPIError.value.format(api.error))
             return
         else:
-            obj.host_group_id = host_grop_id
+            obj.zabbix_id = host_grop_id
             obj.save()
 
     def delete_model(self, request, obj):
 
         api = ApiHostGroup()
-        api.delete(host_group_ids=[obj.host_group_id])
+        api.delete(host_group_ids=[obj.zabbix_id])
         obj.delete()
 
     def delete_queryset(self, request, queryset):
 
         host_group_ids = []
         for obj in queryset:
-            host_group_ids.append(obj.host_group_id)
+            host_group_ids.append(obj.zabbix_id)
 
         api = ApiHostGroup()
         api.delete(host_group_ids=host_group_ids)
