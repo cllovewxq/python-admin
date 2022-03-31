@@ -14,8 +14,8 @@ class Station(models.Model):
 
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     zabbix_id = models.CharField(max_length=32, verbose_name="Zabbix ID")
-    zabbix_code = models.UUIDField(verbose_name="Zabbix 编号", default=uuid.uuid4)
-    name = models.CharField(max_length=32, verbose_name="名称", unique=True)
+    zabbix_code = models.CharField(max_length=64, verbose_name="Zabbix 编号", default=uuid.uuid4)
+    name = models.CharField(max_length=32, verbose_name="台站名称", unique=True)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     update_time = models.DateTimeField(auto_now=True, verbose_name="修改时间")
     remark = models.TextField(verbose_name="备注", null=True, blank=True)
