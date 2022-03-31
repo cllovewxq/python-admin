@@ -15,23 +15,24 @@ from zabbix.models import Hosts
 
 class Switch(models.Model):
 
-    CodePrefix = "SW-{}"
+    Prefix = "SW-{}"
+    DeviceType = ""
 
     class StatusChoices(enum.Enum):
-        """微课状态"""
+        """状态"""
 
         enable = "启用"
         disable = "禁用"
 
-    db_models = Hosts.objects.using("zabbix").filter(status=3).values_list("hostid", "name")
+    db_templates = Hosts.objects.using("zabbix").filter(status=3).values_list("hostid", "name")
 
-    # id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
-    id = models.AutoField(primary_key=True)
-    host = models.UUIDField(default=uuid.uuid4, verbose_name="主机编号")
-    host_id = models.CharField(max_length=32, verbose_name="主机ID")
+    id = models.AutoField(primary_key=True, editable=False)
+    code = models.CharField(max_length=32, verbose_name="设备编号")
     station = models.ForeignKey(Station, on_delete=models.CASCADE, verbose_name="所属台站")
+    zabbix_id = models.BigIntegerField(verbose_name="Zabbix ID")
+    zabbix_code = models.CharField(max_length=64, verbose_name="zabbix 编号", default=uuid.uuid4)
     name = models.CharField(max_length=32, verbose_name="设备名称", unique=True)
-    model_id = models.IntegerField(choices=db_models, verbose_name="设备类型")
+    template_id = models.IntegerField(choices=db_templates, verbose_name="模板ID")
     ipaddress = models.CharField(max_length=32, verbose_name="设备IP")
     port = models.IntegerField(verbose_name="设备端口", validators=[MinValueValidator(1), MaxValueValidator(65536)], default=161)
     snmp_community = models.CharField(max_length=64, verbose_name="SNMP共同体名")
@@ -43,11 +44,6 @@ class Switch(models.Model):
     def __str__(self):
         return str(self.name)
 
-    def code(self):
-        return self.CodePrefix.format(self.id)
-
-    code.short_description = "设备编号"
-
     def status_operation(self):
         value = self.StatusChoices[str(self.status)].value
         if self.status == self.StatusChoices.enable.name:
@@ -58,6 +54,11 @@ class Switch(models.Model):
         return value
 
     status_operation.short_description = "状态"
+
+    def operation(self):
+        return format_html('<a href="/history/{host_id}/get/">最新数据</a>'.format(host_id=self.id))
+
+    operation.short_description = "操作"
 
     # 定义表名称
     class Meta:
