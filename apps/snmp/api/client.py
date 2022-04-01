@@ -34,7 +34,7 @@ class ApiSnmpClient(object):
                 DestHost=host,
                 Community=community
             )
-            logger.info("snmp walk 返回结果: {}".format(result))
+            logger.debug("snmp walk 返回结果: {}".format(result))
 
             return {
                 "success": True,
