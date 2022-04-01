@@ -13,17 +13,17 @@ logger = logging.getLogger(__name__)
 
 class ApiSnmpClient(object):
 
-    def __init__(self, host="localhost", community="public", version=2):
+    def __init__(self):
         """
         snmp客户端
         """
-        self.version = version
-        self.host = host
-        self.community = community
+        self.version = 2
 
-    def walk(self, oid) -> dict:
+    def walk(self, host, community, oid) -> dict:
         """
         snmp walk
+        :param host: 主机IP
+        :param community: 共同体名
         :param oid:
         :return:
         """
@@ -31,8 +31,8 @@ class ApiSnmpClient(object):
             result = netsnmp.snmpwalk(
                 oid,
                 Version=self.version,
-                DestHost=self.host,
-                Community=self.community
+                DestHost=host,
+                Community=community
             )
             logger.info("snmp walk 返回结果: {}".format(result))
 
