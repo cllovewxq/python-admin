@@ -10,7 +10,7 @@ from django.db import models
 from django.utils.html import format_html
 from django.core.validators import MinValueValidator, MaxValueValidator
 from station.models import Station
-from zabbix.models import Hosts
+from model.models import Model
 
 
 class Switch(models.Model):
@@ -24,15 +24,13 @@ class Switch(models.Model):
         enable = "启用"
         disable = "禁用"
 
-    db_templates = Hosts.objects.using("zabbix").filter(status=3).values_list("hostid", "name")
-
     id = models.AutoField(primary_key=True, editable=False)
     code = models.CharField(max_length=32, verbose_name="设备编号")
     station = models.ForeignKey(Station, on_delete=models.CASCADE, verbose_name="所属台站")
     zabbix_id = models.BigIntegerField(verbose_name="Zabbix ID")
     zabbix_code = models.CharField(max_length=64, verbose_name="zabbix 编号", default=uuid.uuid4)
     name = models.CharField(max_length=32, verbose_name="设备名称", unique=True)
-    template_id = models.IntegerField(choices=db_templates, verbose_name="模板ID")
+    model = models.ForeignKey(Model, on_delete=models.CASCADE, verbose_name="所属模型")
     ipaddress = models.CharField(max_length=32, verbose_name="设备IP")
     port = models.IntegerField(verbose_name="设备端口", validators=[MinValueValidator(1), MaxValueValidator(65536)], default=161)
     snmp_community = models.CharField(max_length=64, verbose_name="SNMP共同体名")
@@ -56,7 +54,8 @@ class Switch(models.Model):
     status_operation.short_description = "状态"
 
     def operation(self):
-        return format_html('<a href="/history/{host_id}/get/">最新数据</a>'.format(host_id=self.id))
+        return format_html('<a href="/history/{host_id}/get/">[最新数据]</a>&nbsp;&nbsp;'
+                           '<a href="/admin/problem/problem/?device_code={code}" target="_blank">[告警]</a>&nbsp;&nbsp;'.format(host_id=self.id, code=self.code))
 
     operation.short_description = "操作"
 

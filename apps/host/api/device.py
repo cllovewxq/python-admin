@@ -53,3 +53,16 @@ class ApiDevice(object):
                 return db_device.name
         return False
 
+    def get_station_name_from_type(self, device_type, zabbix_id, zabbix_code) -> Optional[str] == bool:
+        """
+        查询
+        :return:
+        """
+        logger.debug(self.__doc__)
+
+        if device_type == EnumDeviceType.switch.name:
+            switch = Switch.objects.filter(zabbix_id=zabbix_id, zabbix_code=zabbix_code).exists()
+            if switch:
+                db_device = Switch.objects.get(zabbix_id=zabbix_id, zabbix_code=zabbix_code)
+                return db_device.station.name
+        return False
