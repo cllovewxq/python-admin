@@ -37,6 +37,7 @@ INSTALLED_APPS = [
 
     'simpleui',
     'rest_framework',
+    'django_apscheduler',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 
     'base',
     'host',
+    'model',
     'problem',
     'station',
     'zabbix',
@@ -230,6 +232,23 @@ SIMPLEUI_CONFIG = {
                     'name': '交换机',
                     'icon': 'fa fa-tag',
                     'url': 'host/switch/'
+                }
+            ]
+        },
+        {
+            'app': 'model',
+            'name': '模型模块',
+            'icon': 'fas fa-archive',
+            'models': [
+                {
+                    'name': '模型分类',
+                    'icon': 'fa fa-tag',
+                    'url': 'model/classify/'
+                },
+                {
+                    'name': '模型管理',
+                    'icon': 'fa fa-tag',
+                    'url': 'model/model/'
                 }
             ]
         },

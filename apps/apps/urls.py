@@ -20,6 +20,7 @@ from base.views.favicon import favicon_view
 from history import views as history_views
 from host import views as host_views
 from problem import views as problem_views
+from modbus.scheduler import init_scheduler
 
 
 urlpatterns = [
@@ -42,3 +43,7 @@ urlpatterns = [
 
 admin.site.site_header = "台站统一监控平台"
 admin.site.site_title = "台站统一监控平台"
+
+
+scheduler = init_scheduler()
+scheduler.start()
