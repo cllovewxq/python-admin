@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'apps.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 
-DB_IP = "127.0.0.1"
+DB_IP = "172.16.60.161"
 DB_NAME_DATA = "data"
 DB_NAME_ZABBIX = "zabbix"
 DB_PORT = "5432"
@@ -182,7 +182,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 APPEND_SLASH = False
 
 
-ZABBIX_IP = "127.0.0.1"
+ZABBIX_IP = "172.16.60.161"
+ZABBIX_PORT = "10051"
 ZABBIX_TOKEN = "857d81b382d352b2808ba9a6ff004eab8c357cc169e46649170ffbed80d81273"
 
 
@@ -250,6 +251,23 @@ SIMPLEUI_CONFIG = {
                     'icon': 'fa fa-tag',
                     'url': 'model/model/'
                 }
+            ]
+        },
+        {
+            'app': 'task',
+            'name': '任务模块',
+            'icon': 'fas fa-tasks',
+            'models': [
+                {
+                    'name': '任务管理',
+                    'icon': 'fa fa-tag',
+                    'url': 'django_apscheduler/djangojob/'
+                },
+                {
+                    'name': '任务记录',
+                    'icon': 'fa fa-tag',
+                    'url': 'django_apscheduler/djangojobexecution/'
+                },
             ]
         },
         {
