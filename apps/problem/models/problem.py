@@ -55,6 +55,15 @@ class Problem(models.Model):
 
     device_name.short_description = "设备名称"
 
+    def device_station(self):
+        name = ApiDevice().get_station_name_from_type(device_type=self.device_type, zabbix_id=self.zabbix_id, zabbix_code=self.zabbix_code)
+        if not name:
+            return "设备已被删除"
+        else:
+            return name
+
+    device_station.short_description = "设备台站"
+
     def ack_status_operation(self):
         value = self.AckStatusChoices[str(self.ack_status)].value
         if self.ack_status == self.AckStatusChoices.no.name:
