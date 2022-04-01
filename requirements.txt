@@ -15,6 +15,7 @@ idna==3.3
 psycopg2==2.9.3
 pymodbus==2.5.3
 pyserial==3.5
+python3-netsnmp==1.1a1
 pytz==2022.1
 pytz-deprecation-shim==0.1.0.post0
 rfc3986==1.5.0
