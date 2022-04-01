@@ -19,6 +19,7 @@ from base import views as base_views
 from base.views.favicon import favicon_view
 from history import views as history_views
 from host import views as host_views
+from snmp import views as snmp_views
 from problem import views as problem_views
 from modbus.scheduler import init_scheduler
 
@@ -32,6 +33,8 @@ urlpatterns = [
     path('host/switch/disable/<switch_id>/', host_views.SwitchDisableAPIView.as_view(), name="交换机禁用"),
 
     path('problem/problem/acknowledge/<problem_id>/', problem_views.ProblemAcknowledgeAPIView.as_view(), name="告警确认"),
+
+    path('snmp/walk/', snmp_views.SnmpWalkAPIView.as_view(), name="SNMP walk"),
 
     path('history/<host_id>/get/', history_views.HistoryHTMLView.as_view(), name="历史"),
     path('api/problem/create/', problem_views.ProblemCreateAPIView.as_view(), name="告警创建"),

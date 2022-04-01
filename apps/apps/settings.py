@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'host',
     'model',
     'problem',
+    'snmp',
     'station',
     'zabbix',
 ]
