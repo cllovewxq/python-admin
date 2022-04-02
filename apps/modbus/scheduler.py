@@ -27,7 +27,7 @@ def init_scheduler() -> BackgroundScheduler:
 
     # 线程池
     executors = {
-        "default": ThreadPoolExecutor(30),
+        "default": ThreadPoolExecutor(20),
         "processpool": ProcessPoolExecutor(cpu_count()),
     }
 
