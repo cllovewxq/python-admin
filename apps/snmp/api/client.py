@@ -24,11 +24,41 @@ class ApiSnmpClient(object):
         snmp walk
         :param host: 主机IP
         :param community: 共同体名
-        :param oid:
+        :param oid: OID
         :return:
         """
         try:
             result = netsnmp.snmpwalk(
+                oid,
+                Version=self.version,
+                DestHost=host,
+                Community=community
+            )
+            logger.debug("snmp walk 返回结果: {}".format(result))
+
+            return {
+                "success": True,
+                "result": result
+            }
+
+        except Exception as e:
+            logger.error("snmp walk 发生异常: {}".format(e))
+            return {
+                "success": False,
+                "error": str(e)
+            }
+
+    def set(self, host, community, oid, value) -> dict:
+        """
+        snmp set
+        :param host: 主机IP
+        :param community: 共同体名
+        :param oid: OID
+        :param value: 值
+        :return:
+        """
+        try:
+            result = netsnmp.set(
                 oid,
                 Version=self.version,
                 DestHost=host,

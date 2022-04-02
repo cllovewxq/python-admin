@@ -35,6 +35,7 @@ urlpatterns = [
     path('problem/problem/acknowledge/<problem_id>/', problem_views.ProblemAcknowledgeAPIView.as_view(), name="告警确认"),
 
     path('snmp/walk/', snmp_views.SnmpWalkAPIView.as_view(), name="SNMP walk"),
+    path('snmp/set/', snmp_views.SnmpSetAPIView.as_view(), name="SNMP set"),
 
     path('history/<host_id>/get/', history_views.HistoryHTMLView.as_view(), name="历史"),
     path('api/problem/create/', problem_views.ProblemCreateAPIView.as_view(), name="告警创建"),
